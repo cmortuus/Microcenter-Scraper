@@ -10,9 +10,9 @@ import kotlin.system.exitProcess
 
 fun main() {
     while (true) {
-        Runtime.getRuntime().addShutdownHook(Thread { "killall firefox".runCommand(null) })
         arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
         Thread.sleep(1000 * 60 * 60 * 3)
+        "killall firefox".runCommand(null)
     }
 }
 
@@ -28,10 +28,8 @@ class Store(private val store: String) {
         Class.forName("com.mysql.jdbc.Driver")
         connect = DriverManager.getConnection(url, user, password)
         connect.prepareStatement("DELETE FROM Items WHERE time >= NOW() - INTERVAL 4 HOUR AND time <= NOW() - INTERVAL 2 HOUR;").execute()
-
         try {
-            options = FirefoxOptions()
-                    .addPreference("permissions.default.image", 2)
+            options = FirefoxOptions().addPreference("permissions.default.image", 2)
             driver = FirefoxDriver(options)
             driver.get("https://www.microcenter.com/site/products/open-box.aspx")
             for (catagory in driver.findElements(By.className("ovalbutton"))) {
@@ -49,30 +47,34 @@ class Store(private val store: String) {
             driver.get(category.getAttribute("href"))
             changeStore(driver)
             while (true) {
-                driver.findElements(By.className("product_wrapper")).forEachIndexed { i, item -> scrapeItem(item, category.text.substring(5), i) }
-                driver.findElements(By.className("pages")).last().also {
+                driver.findElement(By.className("pages")).findElements(By.tagName("li")).last().also {
                     if (it.text != ">") {
                         driver.close()
                         return
+                    } else {
+                        driver.findElements(By.className("product_wrapper")).forEachIndexed { i, item -> scrapeItem(item, category.text.substring(5), i) }
                     }
                 }.click()
             }
-        } catch (e: WebDriverException) {
-            println(e.stackTrace)
-            driver.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     private fun scrapeItem(item: WebElement, category: String, elementNum: Int) {
-        val dataLink = item.findElement(By.id("hypProductH2_$elementNum"))
-        val name = dataLink.getAttribute("data-name")
-        val normalPrice = dataLink.getAttribute("data-price").toDouble()
-        val url = "www.microcenter.com${dataLink.getAttribute("href")}"
-        val openBoxPrice = item.findElement(By.className("price-label")).text.replace("[^0-9]".toRegex(), "").substring(0, item.findElement(By.className("price-label")).text.replace("[^0-9]".toRegex(), "").length).toDouble()
-        println("$category $name  $url  $normalPrice  $openBoxPrice  ${openBoxPrice / normalPrice}  $store")
-        val percentDifference = (openBoxPrice / normalPrice) * 100
-        arrayOf(category, name, url, normalPrice, openBoxPrice, percentDifference, store).forEach { print("$it  ") }
-        insertIntoTable(category, name, url, normalPrice, openBoxPrice, percentDifference, store)
+        try {
+            val dataLink = item.findElement(By.id("hypProductH2_$elementNum"))
+            val name = dataLink.getAttribute("data-name")
+            val normalPrice = dataLink.getAttribute("data-price").toDouble()
+            val url = dataLink.getAttribute("href")
+            val openBoxPrice = item.findElement(By.className("price-label")).text.replace("[^0-9]".toRegex(), "").toDouble() / 100
+            val percentDifference = (openBoxPrice / normalPrice) * 100
+            arrayOf(category, name, url, normalPrice, openBoxPrice, percentDifference, store).forEach { print("$it  ") }
+            println()
+            insertIntoTable(category, name, url, normalPrice, openBoxPrice, percentDifference, store)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun changeStore(driver: WebDriver) {
@@ -88,9 +90,8 @@ class Store(private val store: String) {
 
     private fun insertIntoTable(category: String, name: String, url: String, normalPrice: Double, openBoxPrice: Double, percentDifference: Double, store: String) {
 //         PreparedStatements can use variables and are more efficient
-        val preparedStatement = connect
-                .prepareStatement("INSERT INTO `Items` (`id`, `time`, `catagory`, `productName`, `url`, `normalPrice`, " +
-                        "`openBoxPrice`, `percentDifference`, `store`) VALUES (NULL, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?);")
+        val preparedStatement = connect.prepareStatement("INSERT INTO `Items` (`id`, `time`, `catagory`, `productName`, `url`, `normalPrice`, " +
+                "`openBoxPrice`, `percentDifference`, `store`) VALUES (NULL, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?, ?);")
         // Parameters start with 1
         preparedStatement.setString(1, category)
         preparedStatement.setString(2, name)
