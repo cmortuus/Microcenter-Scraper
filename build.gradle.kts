@@ -8,19 +8,19 @@ plugins {
 }
 
 group = ""
-version = "1.0"
+version = "1.1"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    testCompile("junit", "junit", "4.12")
     compile("org.seleniumhq.selenium", "selenium-java", "3.+")
     compile("mysql", "mysql-connector-java", "5.1.13")
-
-    testCompile("junit", "junit", "4.12")
+    compile("com.sun.mail", "javax.mail", "1.6.0")
 }
 
 configure<JavaPluginConvention> {
@@ -31,8 +31,8 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val fatJar = task("fatJar", type = Jar::class) {
-    baseName = "${project.name}-fat"
+val fatJarScrape = task("fatJarScrape", type = Jar::class) {
+    baseName = "${project.name}Scrape-fat"
     manifest {
         attributes["Implementation-Title"] = "ScrapeKt"
         attributes["Implementation-Version"] = version
@@ -42,8 +42,20 @@ val fatJar = task("fatJar", type = Jar::class) {
     with(tasks.jar.get() as CopySpec)
 }
 
+val fatJarEmails = task("fatJarEmails", type = Jar::class) {
+    baseName = "${project.name}Emails-fat"
+    manifest {
+        attributes["Implementation-Title"] = "EmailsKt"
+        attributes["Implementation-Version"] = version
+        attributes["Main-Class"] = "EmailsKt"
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    with(tasks.jar.get() as CopySpec)
+}
+
 tasks {
     "build" {
-        dependsOn(fatJar)
+        dependsOn(fatJarScrape)
+        dependsOn(fatJarEmails)
     }
 }

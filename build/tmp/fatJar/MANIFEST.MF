@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: ScrapeKt
-Implementation-Version: 1.0
-Main-Class: ScrapeKt
-

@@ -5,26 +5,22 @@ https://support.rackspace.com/how-to/installing-mysql-server-on-ubuntu/
 
 I have come up with a problem regurlarly where MySQL's root password does not configure properly upon the first install. I would sugest you use this guide if that happens to you. https://askubuntu.com/questions/766334/cant-login-as-mysql-user-root-from-normal-user-account-in-ubuntu-16-04
 
-```
-GRANT ALL ON MicrocenterItems.* TO 'microcenter'@'localhost';
-```
-```
-FLUSH PRIVILEGES;
-```
+### Set up MySQL
 ```
 mysql -u root -p
 ```
 ```
-source sqlCode.sql
+source MicrocenterItems.sql
+
+CREATE USER 'microcenter'@'localhost' IDENTIFIED BY 'YourPassword';
+GRANT USAGE ON *.* TO 'microcenter'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE, ON `MicrocenterItems`.* TO 'microcenter'@'%';
 ```
-To create accounts to log in with run
-```
-UPDATE THIS
-```
-#### To Scrape the Data 
+
+### To Scrape the Data 
 Download grekodriver and put somewhere in the path. I sugest /usr/local/bin
 ```
-python3 scrape.py
+python3 runScraper.py
 ```
 or
 ```
