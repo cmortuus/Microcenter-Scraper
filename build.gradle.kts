@@ -21,6 +21,7 @@ dependencies {
     compile("org.seleniumhq.selenium", "selenium-java", "3.+")
     compile("mysql", "mysql-connector-java", "5.1.13")
     compile("com.sun.mail", "javax.mail", "1.6.0")
+    compile("com.googlecode.json-simple", "json-simple", "1.1.1")
 }
 
 configure<JavaPluginConvention> {

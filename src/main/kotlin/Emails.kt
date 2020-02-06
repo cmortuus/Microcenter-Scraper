@@ -1,4 +1,10 @@
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.URL
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*
@@ -8,10 +14,11 @@ import javax.mail.internet.MimeMessage
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-
 fun main() {
-    val fromEmail = "YourEmail"
-    val password = "YourPassword"
+    val jsonArray = JSONArray();
+    val emailBody = StringBuilder()
+    val fromEmail = "email"
+    val password = "tmepPasswd"
     val props = Properties()
 
     props["mail.smtp.host"] = "smtp.gmail.com"
@@ -27,31 +34,33 @@ fun main() {
         }
     }).also { it.debug = true }
 
-    val url = "jdbc:mysql://localhost:3306/MicrocenterItems?useSSL=false"
+
+    val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
     val user = "microcenter"
-    val sqlPassword = "YourPassword"
+    val sqlPassword = "@496^W48^6EmB08zDPwML#g4R@nIftnSRS^h"
     Class.forName("com.mysql.jdbc.Driver")
     val connect: Connection = DriverManager.getConnection(url, user, sqlPassword)
-    val thingsToSend = HashMap<String, ArrayList<String>>()
-    val searches = connect.prepareStatement("SELECT `productName`, `category`, `store`, `minPrice`, `maxPrice`, `percentDifference`, `email`, `name` FROM `Searches`").executeQuery()
-    val checkEmailsSent = connect.prepareStatement("SELECT `productName`, `openBoxPrice`, `percentDifference`, `store`, `name` FROM EmailsSent WHERE name = ?;")
-    val searchesByName = HashMap<String, ArrayList<Array<Any>>>()
+//  Items in sent emails key == the cols and value == if it was in the latest scrape
+    val emailedItems = HashMap<String, Boolean>()
+//  The items that have been grabbed sorted by the name of the search and then the vals of the cols
+    val items = HashMap<String, Array<Any>>()
+//  Searches
+    val searchesSQL = ArrayList<String>()
+
+    val sent = connect.prepareStatement("SELECT `productName`, `openBoxPrice`, `percentDifference`, `store` FROM EmailsSent").executeQuery()
+    while (sent.next()) {
+        emailedItems["${sent.getString("productName")}, ${sent.getDouble("openBoxPrice")}, ${sent.getDouble("percentDifference")}, ${sent.getString("store")}"] = false
+    }
+    val searches = connect.prepareStatement("SELECT `productName`, `category`, `store`, `minPrice`, `maxPrice`, `percentDifference` FROM `Searches`").executeQuery()
     while (searches.next()) {
-        checkEmailsSent.setString(1, searches.getString(8))
-        val results = checkEmailsSent.executeQuery()
-        while (results.next()) {
-            if (searchesByName[results.getString(5)] == null)
-                searchesByName[results.getString(5)] = ArrayList()
-            searchesByName[results.getString(5)]?.add(arrayOf(results.getString(1), results.getDouble(2), results.getDouble(3), results.getString(4)))
-        }
-        println("Searches by name = $searchesByName")
+//      Create the sql stmts to get the items
         val sqlStmt = arrayListOf("SELECT `category`, `productName`, `url`, `normalPrice`, `openBoxPrice`, `percentDifference`, `store` FROM `Items` WHERE ")
         if (searches.getString(1) != null) sqlStmt.add("productName LIKE '%${searches.getString(1)}%' ")
         if (searches.getString(2) != null) sqlStmt.add("category LIKE '%${searches.getString(2)}%' ")
         if (searches.getString(3) != null) sqlStmt.add("store = '%${searches.getString(3)}%' ")
         if (searches.getString(4) != null) sqlStmt.add("openBoxPrice > ${searches.getDouble(4)} ")
-        if (searches.getString(4) != null) sqlStmt.add("openBoxPrice < ${searches.getDouble(5)} ")
-        if (searches.getString(5) != null) sqlStmt.add("percentDifference < '${searches.getDouble(6)}%' ")
+        if (searches.getString(5) != null) sqlStmt.add("openBoxPrice < ${searches.getDouble(5)} ")
+        if (searches.getString(6) != null) sqlStmt.add("percentDifference < '${searches.getDouble(6)}%' ")
         val sb = StringBuilder()
         for (i in 0 until sqlStmt.size) {
             when (i) {
@@ -59,67 +68,61 @@ fun main() {
                 sqlStmt.size - 1 -> sb.append(sqlStmt[i] + ";")
                 else -> sb.append(" ${sqlStmt[i]} AND ")
             }
-            println(sb.toString())
         }
-        if (thingsToSend["${searches.getString(7)},${searches.getString(8)}"] == null)
-            thingsToSend["${searches.getString(7)},${searches.getString(8)}"] = ArrayList()
-        thingsToSend["${searches.getString(7)},${searches.getString(8)}"] = arrayListOf(sb.toString())
-        println(thingsToSend)
+        searchesSQL.add(sb.toString())
     }
-    for (emailAndArray in thingsToSend.entries) {
+    for (search in searchesSQL) {
+        val results = connect.prepareStatement(search).executeQuery()
         val sb = StringBuilder()
-        for (sqlStmt in emailAndArray.value) {
-            val results = connect.prepareStatement(sqlStmt).executeQuery()
-            while (results.next()) {
-                val checkArray = arrayOf(results.getString(2), results.getDouble(5), results.getDouble(6), results.getString(7))
-                var existsAlready = false
-                println(emailAndArray.key.split(",")[1])
-                searchesByName[emailAndArray.key.split(",")[1]]?.let {
-                    it.forEachIndexed { i, oldItems ->
-                        if (checkArray.contentEquals(oldItems)) {
-                            existsAlready = true
-                            println("Not sending item because it has already been sent")
-                            searchesByName[emailAndArray.key.split(",")[1]]?.set(i, arrayOf())
-                        }
-                    }
-                }
-                if (!existsAlready) {
-                    sb.append("Category = ${results.getString(1)}    ")
-                    sb.append("productName = ${results.getString(2)}    ")
-                    sb.append("normalPrice = ${results.getDouble(4)}    ")
-                    sb.append("openBoxPrice = ${results.getDouble(5)}    ")
-                    sb.append("percentDifference = ${results.getDouble(6)}    ")
-                    sb.append("store = ${results.getString(7)}    ")
-                    sb.append("url = ${results.getString(3)}    ")
-                    sb.append("\n")
-                    val insertIntoEmailsSent = connect.prepareStatement("INSERT INTO EmailsSent (`productName`, `openBoxPrice`, `percentDifference`, `store`, `name`) VALUES (?, ?, ?, ?, ?);")
-                    insertIntoEmailsSent.setString(1, results.getString(2))
-                    insertIntoEmailsSent.setDouble(2, results.getDouble(5))
-                    insertIntoEmailsSent.setDouble(3, results.getDouble(6))
-                    insertIntoEmailsSent.setString(4, results.getString(7))
-                    insertIntoEmailsSent.setString(5, emailAndArray.key.split(",")[1])
-                    insertIntoEmailsSent.execute()
-                }
+        while (results.next()) {
+            val resultsVals = "${results.getString("productName")}, ${results.getDouble("openBoxPrice")}, ${results.getDouble("percentDifference")}, ${results.getString("store")}"
+            val jsonObject = JSONObject()
+//            jsonObject["img"] = mapOf("img" to "https://90a1c75758623581b3f8-5c119c3de181c9857fcb2784776b17ef.ssl.cf2.rackcdn.com/laptop-cat.jpg")
+            jsonObject["0"] = mapOf("name" to results.getString(2))
+            jsonObject["1"] = mapOf("price" to "$ ${results.getString(5)}")
+            jsonObject["2"] = mapOf("%" to "% ${results.getString(6).substring(0,5)}")
+            jsonObject["3"] = mapOf("Store" to results.getString(7))
+            jsonObject["url"] = mapOf("url" to results.getString(3))
+            jsonArray.add(jsonObject)
+            if (emailedItems[resultsVals] == null) {
+                sb.append("  ${results.getString(1)}    ")
+                sb.append("  ${results.getString(2)}    ")
+                sb.append("  ${results.getDouble(4)}    ")
+                sb.append("  ${results.getDouble(5)}    ")
+                sb.append("  ${results.getDouble(6)}    ")
+                sb.append("  ${results.getString(7)}    ")
+                sb.append("  ${results.getString(3)}    ")
+                sb.append("\n\n")
+                val insertIntoEmailsSent = connect.prepareStatement("INSERT INTO EmailsSent (`productName`, `openBoxPrice`, `percentDifference`, `store`) VALUES (?, ?, ?, ?);")
+                insertIntoEmailsSent.setString(1, results.getString(2))
+                insertIntoEmailsSent.setDouble(2, results.getDouble(5))
+                insertIntoEmailsSent.setDouble(3, results.getDouble(6))
+                insertIntoEmailsSent.setString(4, results.getString(7))
+                insertIntoEmailsSent.execute()
+                emailBody.append(sb.toString())
+            } else {
+                println("Not sending item because it has already been sent")
+                emailedItems[resultsVals] = true
             }
         }
-        for (search in searchesByName.values) {
-            for (result in search) {
-                if (!result.contentEquals(arrayOf())) {
-                    val deleteStmt = connect.prepareStatement("DELETE FROM EmailsSent WHERE `productName` = ? AND `openBoxPrice` = ? AND `percentDifference` = ? AND `store` = ?;")
-                    deleteStmt.setString(1, result[0] as String)
-                    deleteStmt.setDouble(2, result[1] as Double)
-                    deleteStmt.setDouble(3, result[2] as Double)
-                    deleteStmt.setString(4, result[3] as String)
-                    deleteStmt.execute()
-                    println("Deleting line")
-                }
-            }
-        }
-        val body = sb.toString().also(::println)
-        val toEmail = emailAndArray.key.split(",")[0].also(::println)
-        val greeting = "Hey Caleb,\n These are the deals we found:\n\n"
-        if (body != "") sendEmail(session, toEmail, "MicrocenterItems", "$greeting$body", fromEmail)
     }
+    for (itemAndBool in emailedItems.entries) if (!itemAndBool.value) deleteItem(itemAndBool.key, connect)
+    if (emailBody.toString() != "") sendEmail(session, "calebmorton98@gmail.com", "Microcenter Items", emailBody.toString(), fromEmail)
+    val finalJson = JSONObject()
+    finalJson["project"] = "microcenter"
+    finalJson["data"] = jsonArray
+    if (jsonArray.size > 0) apiRequest(finalJson.toJSONString().also(::println))
+}
+
+fun deleteItem(sqlString: String, connect: Connection) {
+    val sqlArray = sqlString.split(", ")
+    val deleteStmt = connect.prepareStatement("DELETE FROM EmailsSent WHERE `productName` = ? AND `openBoxPrice` = ? AND `percentDifference` = ? AND `store` = ?;")
+    deleteStmt.setString(1, sqlArray[0])
+    deleteStmt.setDouble(2, sqlArray[1].toDouble())
+    deleteStmt.setDouble(3, sqlArray[2].toDouble())
+    deleteStmt.setString(4, sqlArray[3])
+    deleteStmt.execute()
+    println("Deleting line")
 }
 
 /**
@@ -151,5 +154,26 @@ fun sendEmail(session: Session?, toEmail: String?, subject: String?, body: Strin
         println("EMail Sent Successfully!!")
     } catch (e: Exception) {
         e.printStackTrace()
+    }
+}
+
+fun apiRequest(jsonString: String) {
+    val url = URL("http://youcantblock.me")
+    val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+    con.doOutput = true
+    con.requestMethod = "POST"
+    con.setRequestProperty("Content-Type", "application/json; utf-8")
+    con.setRequestProperty("Accept", "application/json")
+    con.outputStream.use { os ->
+        val input = jsonString.toByteArray()
+        os.write(input, 0, input.size)
+    }
+    BufferedReader(InputStreamReader(con.inputStream, "utf-8")).use { br ->
+        val response = StringBuilder()
+        var responseLine: String?
+        while (br.readLine().also { responseLine = it } != null) {
+            response.append(responseLine!!.trim { it <= ' ' })
+        }
+        println(response.toString())
     }
 }

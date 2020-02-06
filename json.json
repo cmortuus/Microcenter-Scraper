@@ -1,0 +1,236 @@
+{
+  "project": "microcenter",
+  "items": [
+    {
+      "openBoxPrice": "257.96",
+      "percentDifference": "67.88599699992103",
+      "Store": "VA - Fairfax",
+      "productName": "Inspiron 15 5584 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/615428/dell-inspiron-15-5584-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "181.96",
+      "percentDifference": "64.98803528697454",
+      "Store": "VA - Fairfax",
+      "productName": "Inspiron 15 3567 15.6&quot; Laptop Computer - Grey",
+      "URL": "https://www.microcenter.com/product/609922/dell-inspiron-15-3567-156-laptop-computer---grey?ob=1"
+    },
+    {
+      "openBoxPrice": "299.96",
+      "percentDifference": "59.99319986399727",
+      "Store": "VA - Fairfax",
+      "productName": "Inspiron 14 5481 14&quot; 2-in-1 Laptop Computer - Grey",
+      "URL": "https://www.microcenter.com/product/513694/dell-inspiron-14-5481-14-2-in-1-laptop-computer---grey?ob=1"
+    },
+    {
+      "openBoxPrice": "909.96",
+      "percentDifference": "69.99746151893477",
+      "Store": "VA - Fairfax",
+      "productName": "XPS 13 7390 13.4&quot; 2-in-1 Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/610078/dell-xps-13-7390-134-2-in-1-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "815.96",
+      "percentDifference": "67.99723331027758",
+      "Store": "VA - Fairfax",
+      "productName": "Inspiron 13 7386 13.3&quot; 2-in-1 Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/607326/dell-inspiron-13-7386-133-2-in-1-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "674.96",
+      "percentDifference": "74.996388848765",
+      "Store": "MD - Parkville",
+      "productName": "XPS 13 9380 13.3&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/602224/dell-xps-13-9380-133-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "611.96",
+      "percentDifference": "67.996311070123",
+      "Store": "VA - Fairfax",
+      "productName": "Inspiron 15 7590 15.6&quot; Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/608199/dell-inspiron-15-7590-156-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "449.96",
+      "percentDifference": "74.99458324305405",
+      "Store": "MD - Parkville",
+      "productName": "Pavilion 15-cs2073nr 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/603377/hp-pavilion-15-cs2073nr-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "199.96",
+      "percentDifference": "68.95410186558158",
+      "Store": "MD - Parkville",
+      "productName": "Chromebook C330 11.6&quot; 2-in-1 Laptop Computer - White",
+      "URL": "https://www.microcenter.com/product/603921/lenovo-chromebook-c330-116-2-in-1-laptop-computer---white?ob=1"
+    },
+    {
+      "openBoxPrice": "269.96",
+      "percentDifference": "62.78285541524221",
+      "Store": "MD - Rockville",
+      "productName": "ENVY x360 Convertible 15-cp0053cl 15.6&quot; 2-in-1 Laptop Computer Refurbished - Silver",
+      "URL": "https://www.microcenter.com/product/610689/hp-envy-x360-convertible-15-cp0053cl-156-2-in-1-laptop-computer-refurbished---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "899.96",
+      "percentDifference": "74.99729164409705",
+      "Store": "MD - Rockville",
+      "productName": "Inspiron 13 7386 13.3&quot; 2-in-1 Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/607326/dell-inspiron-13-7386-133-2-in-1-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "434.96",
+      "percentDifference": "74.99439645511129",
+      "Store": "MD - Rockville",
+      "productName": "Inspiron 15 5584 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/615429/dell-inspiron-15-5584-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "1294.96",
+      "percentDifference": "64.7483237416187",
+      "Store": "MD - Parkville",
+      "productName": "gram 15Z990-R.AAS9U1 15.6&quot; Laptop Computer - Dark Silver",
+      "URL": "https://www.microcenter.com/product/605749/lg-gram-15z990-raas9u1-156-laptop-computer---dark-silver?ob=1"
+    },
+    {
+      "openBoxPrice": "524.96",
+      "percentDifference": "74.99535707652967",
+      "Store": "MD - Rockville",
+      "productName": "ThinkPad E590 15.6&quot; Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/609972/lenovo-thinkpad-e590-156-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "1424.96",
+      "percentDifference": "74.99828946468139",
+      "Store": "MD - Parkville",
+      "productName": "ThinkPad X1 Extreme 15.6&quot; Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/600018/lenovo-thinkpad-x1-extreme-156-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "1124.96",
+      "percentDifference": "74.9978333188888",
+      "Store": "MD - Parkville",
+      "productName": "ThinkPad X1 Yoga 14&quot; 2-in-1 Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/510367/lenovo-thinkpad-x1-yoga-14-2-in-1-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "1573.96",
+      "percentDifference": "74.95083309920524",
+      "Store": "MD - Parkville",
+      "productName": "Precision 5530 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/601945/dell-precision-5530-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "1104.96",
+      "percentDifference": "73.6644910966073",
+      "Store": "MD - Rockville",
+      "productName": "gram 14Z990-R.AAS7U1 14&quot; Laptop Computer - Dark Silver",
+      "URL": "https://www.microcenter.com/product/605747/lg-gram-14z990-raas7u1-14-laptop-computer---dark-silver?ob=1"
+    },
+    {
+      "openBoxPrice": "674.96",
+      "percentDifference": "74.996388848765",
+      "Store": "MD - Rockville",
+      "productName": "Pavilion 15-cs2071nr 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/603376/hp-pavilion-15-cs2071nr-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "1648.96",
+      "percentDifference": "74.95306796849077",
+      "Store": "MD - Parkville",
+      "productName": "Precision 7530 Mobile Workstation 15.6&quot; Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/601946/dell-precision-7530-mobile-workstation-156-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "1274.96",
+      "percentDifference": "74.99808822404837",
+      "Store": "MD - Parkville",
+      "productName": "ThinkPad T580 15.6&quot; Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/510368/lenovo-thinkpad-t580-156-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "649.96",
+      "percentDifference": "64.99664996649966",
+      "Store": "MD - Parkville",
+      "productName": "EliteBook 840 G5 14&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/512056/hp-elitebook-840-g5-14-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "674.96",
+      "percentDifference": "74.996388848765",
+      "Store": "MD - Rockville",
+      "productName": "Notebook 9 15&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/504202/samsung-notebook-9-15-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "524.96",
+      "percentDifference": "69.99559994133256",
+      "Store": "MD - Rockville",
+      "productName": "VivoBook S15 S532FA-DB55 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/609282/asus-vivobook-s15-s532fa-db55-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "674.96",
+      "percentDifference": "74.996388848765",
+      "Store": "MD - Rockville",
+      "productName": "Pavilion x360 Convertible 14-cd1033nr 14&quot; 2-in-1 Laptop Computer -Silver",
+      "URL": "https://www.microcenter.com/product/603686/hp-pavilion-x360-convertible-14-cd1033nr-14-2-in-1-laptop-computer--silver?ob=1"
+    },
+    {
+      "openBoxPrice": "1124.96",
+      "percentDifference": "74.9978333188888",
+      "Store": "MD - Rockville",
+      "productName": "ThinkPad X1 Yoga 14&quot; 2-in-1 Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/510367/lenovo-thinkpad-x1-yoga-14-2-in-1-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "959.96",
+      "percentDifference": "74.99746091766342",
+      "Store": "MD - Rockville",
+      "productName": "ROG Zephyrus M GM501GS-XS74 15.6&quot; Gaming Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/505811/asus-rog-zephyrus-m-gm501gs-xs74-156-gaming-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "665.96",
+      "percentDifference": "73.99637773753042",
+      "Store": "MD - Rockville",
+      "productName": "ThinkPad E480 14&quot; Laptop Computer - Black",
+      "URL": "https://www.microcenter.com/product/504303/lenovo-thinkpad-e480-14-laptop-computer---black?ob=1"
+    },
+    {
+      "openBoxPrice": "374.96",
+      "percentDifference": "74.9934998699974",
+      "Store": "MD - Rockville",
+      "productName": "Precision M6800 Mobile Workstation 17.3&quot; Laptop Computer Refurbished - Black",
+      "URL": "https://www.microcenter.com/product/607012/dell-precision-m6800-mobile-workstation-173-laptop-computer-refurbished---black?ob=1"
+    },
+    {
+      "openBoxPrice": "748.96",
+      "percentDifference": "66.87202564308609",
+      "Store": "MD - Rockville",
+      "productName": "gram 13Z980-A.AAS7U1 13.3&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/504698/lg-gram-13z980-aaas7u1-133-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "374.96",
+      "percentDifference": "74.9934998699974",
+      "Store": "MD - Rockville",
+      "productName": "15-dw0033nr 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/603374/hp-15-dw0033nr-156-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "1405.96",
+      "percentDifference": "73.9982842014958",
+      "Store": "MD - Rockville",
+      "productName": "Alienware M15 15.6&quot; Gaming Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/603502/dell-alienware-m15-156-gaming-laptop-computer---silver?ob=1"
+    },
+    {
+      "openBoxPrice": "449.96",
+      "percentDifference": "74.99458324305405",
+      "Store": "MD - Rockville",
+      "productName": "Notebook 5 NP550XTA-K02US 15.6&quot; Laptop Computer - Silver",
+      "URL": "https://www.microcenter.com/product/608786/samsung-notebook-5-np550xta-k02us-156-laptop-computer---silver?ob=1"
+    }
+  ]
+}

@@ -5,15 +5,17 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ui.Select
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
-
-import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
+
 fun main() {
     arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
+    Thread.sleep(1000 * 60 * 10)
+    "java -jar MicrocenterEmails-fat-1.1.jar".runCommand(null)
     "killall firefox".runCommand(null)
 }
 
@@ -23,14 +25,14 @@ class Store(private val store: String) {
     private val connect: Connection
 
     init {
-        val url = "jdbc:mysql://localhost:3306/MicrocenterItems?useSSL=false"
+        val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
         val user = "microcenter"
-        val password = "Your Password"
+        val password = "passwd"
         Class.forName("com.mysql.jdbc.Driver")
         connect = DriverManager.getConnection(url, user, password)
         connect.prepareStatement("DELETE FROM Items WHERE time <= NOW() - INTERVAL 15 MINUTE;").execute()
         try {
-            options = FirefoxOptions().addPreference("permissions.default.image", 2)
+            options = FirefoxOptions().addPreference("permissions.default.image", 1)
             driver = FirefoxDriver(options)
             driver.get("https://www.microcenter.com/site/products/open-box.aspx")
             changeStore(driver)
@@ -43,6 +45,10 @@ class Store(private val store: String) {
         }
     }
 
+    /**
+     * On the open box site on microcenter there are 8 categoriesThis scrapes each of them
+     * @param category    A Selenium WebElement containing to a single category
+     */
     private fun scrapeCategory(category: WebElement) {
         try {
             val driver: WebDriver = FirefoxDriver(options)
@@ -63,6 +69,12 @@ class Store(private val store: String) {
         }
     }
 
+    /**
+     * Scrapes a single item
+     * @param item          A Selenium WebElement containing just an item
+     * @param category      A string containing the name of the catagory
+     * @param elementNum    The iterator showing what element on the page it is
+     */
     private fun scrapeItem(item: WebElement, category: String, elementNum: Int) {
         try {
             val dataLink = item.findElement(By.id("hypProductH2_$elementNum"))
@@ -80,6 +92,10 @@ class Store(private val store: String) {
         }
     }
 
+    /**
+     * By default it is going to be on the wrong store. This corrects that.
+     * @param driver    A selenium web driver
+     */
     private fun changeStore(driver: WebDriver) {
         try {
             driver.findElement(By.className("close")).click()
@@ -91,6 +107,9 @@ class Store(private val store: String) {
         }
     }
 
+    /**
+     * @param allofthem All the items that are passed in to send to the database
+     */
     private fun insertIntoTable(
         category: String,
         name: String,
@@ -117,6 +136,9 @@ class Store(private val store: String) {
     }
 }
 
+/**
+ * Modifies the string class to add a run command func
+ */
 fun String.runCommand(workingDir: File?) {
     ProcessBuilder(*split(" ").toTypedArray())
         .directory(workingDir)
