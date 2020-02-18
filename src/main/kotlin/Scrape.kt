@@ -5,7 +5,12 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ui.Select
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
+import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.URL
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.concurrent.TimeUnit
@@ -13,10 +18,13 @@ import kotlin.system.exitProcess
 
 
 fun main() {
-    arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
-    Thread.sleep(1000 * 60 * 10)
-    "java -jar MicrocenterEmails-fat-1.1.jar".runCommand(null)
-    "killall firefox".runCommand(null)
+    AutoUpdateApp("Scraper")
+    while (true) {
+        arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
+        Thread.sleep(1000 * 60 * 10)
+        "java -jar MicrocenterEmails-fat-1.1.jar".runCommand(null)
+        "killall firefox".runCommand(null)
+    }
 }
 
 class Store(private val store: String) {
@@ -146,4 +154,38 @@ fun String.runCommand(workingDir: File?) {
         .redirectError(ProcessBuilder.Redirect.INHERIT)
         .start()
         .waitFor(60, TimeUnit.MINUTES)
+}
+
+class AutoUpdateApp(private val programName: String) {
+    init {
+        Thread {
+            val jsonString = "{\"programCheckIn\" : \"$programName\"}"
+            while (true) {
+                println("sending")
+                apiRequest(jsonString)
+                Thread.sleep(60 * 1000)
+            }
+        }.start()
+    }
+
+    private fun apiRequest(jsonString: String) {
+        val url = URL("http://youcantblock.me/")
+        val con: HttpURLConnection = url.openConnection() as HttpURLConnection
+        con.doOutput = true
+        con.requestMethod = "POST"
+        con.setRequestProperty("Content-Type", "application/json; utf-8")
+        con.setRequestProperty("Accept", "application/json")
+        con.outputStream.use { os ->
+            val input = jsonString.toByteArray()
+            os.write(input, 0, input.size)
+        }
+        BufferedReader(InputStreamReader(con.inputStream, "utf-8")).use { br ->
+            val response = StringBuilder()
+            var responseLine: String?
+            while (br.readLine().also { responseLine = it } != null) {
+                response.append(responseLine!!.trim { it <= ' ' })
+            }
+            println(response.toString())
+        }
+    }
 }
