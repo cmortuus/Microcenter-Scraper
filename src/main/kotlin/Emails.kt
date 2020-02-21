@@ -17,8 +17,8 @@ import kotlin.collections.HashMap
 fun main() {
     val jsonArray = JSONArray();
     val emailBody = StringBuilder()
-    val fromEmail = "email"
-    val password = "tmepPasswd"
+    val fromEmail = ""
+    val password = ""
     val props = Properties()
 
     props["mail.smtp.host"] = "smtp.gmail.com"
@@ -37,7 +37,7 @@ fun main() {
 
     val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
     val user = "microcenter"
-    val sqlPassword = "@496^W48^6EmB08zDPwML#g4R@nIftnSRS^h"
+    val sqlPassword = "A9BB368CEB741DE242CCCA8C4C8C7E9B3171885A"
     Class.forName("com.mysql.jdbc.Driver")
     val connect: Connection = DriverManager.getConnection(url, user, sqlPassword)
 //  Items in sent emails key == the cols and value == if it was in the latest scrape

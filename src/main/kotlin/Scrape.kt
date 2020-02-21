@@ -16,15 +16,9 @@ import java.sql.DriverManager
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
-
 fun main() {
     AutoUpdateApp("Scraper")
-    while (true) {
-        arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
-        Thread.sleep(1000 * 60 * 10)
-        "java -jar MicrocenterEmails-fat-1.1.jar".runCommand(null)
-        "killall firefox".runCommand(null)
-    }
+    arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
 }
 
 class Store(private val store: String) {
@@ -33,12 +27,13 @@ class Store(private val store: String) {
     private val connect: Connection
 
     init {
+        Thread.sleep(30 * 1000)
         val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
         val user = "microcenter"
-        val password = "passwd"
+        val password = ""
         Class.forName("com.mysql.jdbc.Driver")
         connect = DriverManager.getConnection(url, user, password)
-        connect.prepareStatement("DELETE FROM Items WHERE time <= NOW() - INTERVAL 15 MINUTE;").execute()
+        connect.prepareStatement("DELETE FROM Items WHERE time <= NOW() - INTERVAL 10 MINUTE;").execute()
         try {
             options = FirefoxOptions().addPreference("permissions.default.image", 1)
             driver = FirefoxDriver(options)
@@ -163,7 +158,7 @@ class AutoUpdateApp(private val programName: String) {
             while (true) {
                 println("sending")
                 apiRequest(jsonString)
-                Thread.sleep(60 * 1000)
+                Thread.sleep(6 * 1000)
             }
         }.start()
     }
