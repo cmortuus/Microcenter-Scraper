@@ -37,7 +37,7 @@ fun main() {
 
     val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
     val user = "microcenter"
-    val sqlPassword = "A9BB368CEB741DE242CCCA8C4C8C7E9B3171885A"
+    val sqlPassword = ""
     Class.forName("com.mysql.jdbc.Driver")
     val connect: Connection = DriverManager.getConnection(url, user, sqlPassword)
 //  Items in sent emails key == the cols and value == if it was in the latest scrape

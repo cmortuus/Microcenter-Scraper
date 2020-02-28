@@ -18,7 +18,13 @@ import kotlin.system.exitProcess
 
 fun main() {
     AutoUpdateApp("Scraper")
-    arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax").forEach { store -> Thread { Store(store) }.start() }
+    val stores = ArrayList<Thread>()
+    for (store in arrayOf("MD - Parkville", "MD - Rockville", "VA - Fairfax"))
+        stores.add(Thread { Store(store) })
+    stores.forEach { store -> store.start() }
+    stores.forEach { store -> store.join() }
+    "java -jar MicrocenterEmails-fat-1.1.jar".runCommand(null)
+    exitProcess(0)
 }
 
 class Store(private val store: String) {
@@ -27,7 +33,6 @@ class Store(private val store: String) {
     private val connect: Connection
 
     init {
-        Thread.sleep(30 * 1000)
         val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
         val user = "microcenter"
         val password = ""
@@ -39,9 +44,9 @@ class Store(private val store: String) {
             driver = FirefoxDriver(options)
             driver.get("https://www.microcenter.com/site/products/open-box.aspx")
             changeStore(driver)
-            for (category in driver.findElements(By.className("ovalbutton"))) {
+            for (category in driver.findElements(By.className("ovalbutton")))
                 scrapeCategory(category)
-            }
+
         } catch (e: WebDriverException) {
             println(e.printStackTrace())
             exitProcess(1)
@@ -164,7 +169,7 @@ class AutoUpdateApp(private val programName: String) {
     }
 
     private fun apiRequest(jsonString: String) {
-        val url = URL("http://youcantblock.me/")
+        val url = URL("https://youcantblock.me:556/")
         val con: HttpURLConnection = url.openConnection() as HttpURLConnection
         con.doOutput = true
         con.requestMethod = "POST"

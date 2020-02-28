@@ -6,23 +6,31 @@ https://support.rackspace.com/how-to/installing-mysql-server-on-ubuntu/
 I have come up with a problem regurlarly where MySQL's root password does not configure properly upon the first install. I would sugest you use this guide if that happens to you. https://askubuntu.com/questions/766334/cant-login-as-mysql-user-root-from-normal-user-account-in-ubuntu-16-04
 
 ### Set up MySQL
-```
+````
 mysql -u root -p
+````
 ```
-```
-source MicrocenterItems.sql
-
 CREATE USER 'microcenter'@'localhost' IDENTIFIED BY 'YourPassword';
-GRANT USAGE ON *.* TO 'microcenter'@'%';
-GRANT SELECT, INSERT, UPDATE, DELETE, ON `MicrocenterItems`.* TO 'microcenter'@'%';
+GRANT SELECT, INSERT, DELETE, ON `MicrocenterItems`.* TO 'microcenter'@'localhost';
+exit
 ```
-
+```
+mysql -u root -p < MicrocenterItems.sql
+```
 ### To Scrape the Data 
 Download grekodriver and put somewhere in the path. I sugest /usr/local/bin
 ```
-python3 runScraper.py
+java -jar MicrocenterScraper-fat-1.1.jar
 ```
-or
+or 
 ```
-java -jar MicrocenterScraper-fat-1.0.jar
+cd scripts && bash run.bash
 ```
+
+### Make emails work
+If you want to make the emailing work then you have to also run MicrocenterEmails-fat-1.1.jar. 
+
+To do this you must set up a gmail configured to enable less secure apps and then put the user name and password into the java code and compile it with that.
+
+## Make it work with the app
+Well this is harder. I am building an app that can work as a frontend for this, but you will have to set up https://github.com/Catalyze326/Mezzanine-Server on a server that has a static ip and or a dynamic dns and then modify the code in https://github.com/Catalyze326/Flutter-Server-Frontend to allow you to run the app from your server.
