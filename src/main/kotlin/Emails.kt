@@ -17,8 +17,8 @@ import kotlin.collections.HashMap
 fun main() {
     val jsonArray = JSONArray();
     val emailBody = StringBuilder()
-    val fromEmail = ""
-    val password = ""
+    val fromEmail = "YOUR EMAIL REPLACE THIS"
+    val password = "YOUR PASSWORD REPLACE THIS"
     val props = Properties()
 
     props["mail.smtp.host"] = "smtp.gmail.com"
@@ -37,7 +37,7 @@ fun main() {
 
     val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
     val user = "microcenter"
-    val sqlPassword = ""
+    val sqlPassword = "YOUR MYSQL PASSWORD REPLACE THIS"
     Class.forName("com.mysql.jdbc.Driver")
     val connect: Connection = DriverManager.getConnection(url, user, sqlPassword)
 //  Items in sent emails key == the cols and value == if it was in the latest scrape
@@ -78,11 +78,11 @@ fun main() {
             val resultsVals = "${results.getString("productName")}, ${results.getDouble("openBoxPrice")}, ${results.getDouble("percentDifference")}, ${results.getString("store")}"
             val jsonObject = JSONObject()
 //            jsonObject["img"] = mapOf("img" to "https://90a1c75758623581b3f8-5c119c3de181c9857fcb2784776b17ef.ssl.cf2.rackcdn.com/laptop-cat.jpg")
-            jsonObject["0"] = mapOf("name" to results.getString(2))
-            jsonObject["1"] = mapOf("price" to "$ ${results.getString(5)}")
-            jsonObject["2"] = mapOf("%" to "% ${results.getString(6).substring(0,5)}")
-            jsonObject["3"] = mapOf("Store" to results.getString(7))
-            jsonObject["url"] = mapOf("url" to results.getString(3))
+            jsonObject["name"] = results.getString(2)
+            jsonObject["price"] = "$ ${results.getString(5)}"
+            jsonObject["percent"] = "% ${results.getString(6).substring(0, 5)}"
+            jsonObject["store"] = results.getString(7)
+            jsonObject["url"] = results.getString(3)
             jsonArray.add(jsonObject)
             if (emailedItems[resultsVals] == null) {
                 sb.append("  ${results.getString(1)}    ")
@@ -146,8 +146,8 @@ fun sendEmail(session: Session?, toEmail: String?, subject: String?, body: Strin
         msg.setText(body, "UTF-8")
         msg.sentDate = Date()
         msg.setRecipients(
-            Message.RecipientType.TO,
-            InternetAddress.parse(toEmail, false)
+                Message.RecipientType.TO,
+                InternetAddress.parse(toEmail, false)
         )
         println("Message is ready")
         Transport.send(msg)
@@ -158,7 +158,7 @@ fun sendEmail(session: Session?, toEmail: String?, subject: String?, body: Strin
 }
 
 fun apiRequest(jsonString: String) {
-    val url = URL("http://youcantblock.me")
+    val url = URL("YOUR URL REPLACE THIS")
     val con: HttpURLConnection = url.openConnection() as HttpURLConnection
     con.doOutput = true
     con.requestMethod = "POST"

@@ -9,3 +9,4 @@ yes | apt update
 yes | apt upgrade
 yes | apt install default-jdk
 snap install kotlin --classic
+# TODO add the stuff for mysql

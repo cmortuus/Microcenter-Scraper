@@ -3,19 +3,22 @@
 Install MySQL. Here is a good guide for it:
 https://support.rackspace.com/how-to/installing-mysql-server-on-ubuntu/
 
-I have come up with a problem regurlarly where MySQL's root password does not configure properly upon the first install. I would sugest you use this guide if that happens to you. https://askubuntu.com/questions/766334/cant-login-as-mysql-user-root-from-normal-user-account-in-ubuntu-16-04
+I have come up with a problem regularly where MySQL's root password does not configure properly upon the first install. I would sugest you use this guide if that happens to you. https://askubuntu.com/questions/766334/cant-login-as-mysql-user-root-from-normal-user-account-in-ubuntu-16-04
 
 ### Set up MySQL
 ````
 mysql -u root -p
-````
-```
 CREATE USER 'microcenter'@'localhost' IDENTIFIED BY 'YourPassword';
-GRANT SELECT, INSERT, DELETE, ON `MicrocenterItems`.* TO 'microcenter'@'localhost';
-exit
+exit;
 ```
 ```
 mysql -u root -p < MicrocenterItems.sql
+```
+```
+mysql -u root -p
+GRANT SELECT, INSERT, DELETE, ON `MicrocenterItems`.* TO 'microcenter'@'localhost';
+FLUSH PRIVILEGES;
+exit;
 ```
 ### To Scrape the Data 
 Download grekodriver and put somewhere in the path. I sugest /usr/local/bin
@@ -28,6 +31,8 @@ cd scripts && bash run.bash
 ```
 
 ### Make emails work
+I have changed this to sending data to my app. You can add email functionality and if you want help with that email me at calebmorton98@gmail.com.
+
 If you want to make the emailing work then you have to also run MicrocenterEmails-fat-1.1.jar. 
 
 To do this you must set up a gmail configured to enable less secure apps and then put the user name and password into the java code and compile it with that.

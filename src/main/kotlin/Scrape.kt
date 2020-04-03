@@ -1,6 +1,5 @@
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
@@ -23,7 +22,6 @@ fun main() {
         stores.add(Thread { Store(store) })
     stores.forEach { store -> store.start() }
     stores.forEach { store -> store.join() }
-    "java -jar MicrocenterEmails-fat-1.1.jar".runCommand(null)
     exitProcess(0)
 }
 
@@ -35,22 +33,17 @@ class Store(private val store: String) {
     init {
         val url = "jdbc:mysql://localhost:3306/MicrocenterItems?characterEncoding=latin1&useConfigs=maxPerformance"
         val user = "microcenter"
-        val password = ""
+        val password = "YOUR PASSWORD REPLACE THIS"
         Class.forName("com.mysql.jdbc.Driver")
         connect = DriverManager.getConnection(url, user, password)
         connect.prepareStatement("DELETE FROM Items WHERE time <= NOW() - INTERVAL 10 MINUTE;").execute()
-        try {
-            options = FirefoxOptions().addPreference("permissions.default.image", 1)
-            driver = FirefoxDriver(options)
-            driver.get("https://www.microcenter.com/site/products/open-box.aspx")
-            changeStore(driver)
-            for (category in driver.findElements(By.className("ovalbutton")))
-                scrapeCategory(category)
+        options = FirefoxOptions().addPreference("permissions.default.image", 1)
+        driver = FirefoxDriver(options)
+        driver.get("https://www.microcenter.com/site/products/open-box.aspx")
+        changeStore(driver)
+        for (category in driver.findElements(By.className("ovalbutton")))
+            scrapeCategory(category)
 
-        } catch (e: WebDriverException) {
-            println(e.printStackTrace())
-            exitProcess(1)
-        }
     }
 
     /**
@@ -169,7 +162,7 @@ class AutoUpdateApp(private val programName: String) {
     }
 
     private fun apiRequest(jsonString: String) {
-        val url = URL("https://youcantblock.me:556/")
+        val url = URL("YOUR URL REPLACE THIS")
         val con: HttpURLConnection = url.openConnection() as HttpURLConnection
         con.doOutput = true
         con.requestMethod = "POST"
